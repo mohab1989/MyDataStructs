@@ -26,29 +26,24 @@ T linked_list<T>::operator[](int index)
 }
 
 template<class T>
-int * linked_list<T>::find(T obj)
+std::vector<int> linked_list<T>::find(T obj)
 {
-	int * indicies;
-	int * arrayPropagator = indicies;
+	std::vector<int> indicies;
+	node * cur_node = m_head;
 	for (int i = 0; i < m_length; i++)
 	{
-		if (obj == this[i])
+		if (cur_node->m_obj == obj)
 		{
-
+			indicies.push_back(i);
 		}
+		cur_node = cur_node->m_next;
 	}
-	return nullptr;
+	return indicies;
 }
 
 template<class T>
 typename linked_list<T>::node * linked_list<T>::node_at(int index)
 {
-	if (index >= m_length)
-	{
-		printf("linked list index out of bounds\n");
-		fflush(stdout);
-		exit(1);
-	}
 	node * next_node = m_head;
 	for (int i = 0; i < index; i++)
 	{

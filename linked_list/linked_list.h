@@ -1,4 +1,5 @@
 #pragma once
+#include<vector>
 template<class T> 
 class linked_list
 {
@@ -9,7 +10,7 @@ public:
 
 	//----- Functions-----//
 	T operator[](int index);
-	int* find(T obj);
+	std::vector<int> find(T obj);
 	int size();
 	void add_node(T obj);
 	void delete_node(int index);
