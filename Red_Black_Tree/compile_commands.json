@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/run/media/mohab/Work/Projects/MyDataStructs/Red_Black_Tree/build_linux",
+  "command": "/usr/bin/clang++   -I/run/media/mohab/Work/Projects/MyDataStructs/Red_Black_Tree/include    -std=c++14 -o CMakeFiles/Red_Black_Tree.dir/src/red_black_tree.cpp.o -c /run/media/mohab/Work/Projects/MyDataStructs/Red_Black_Tree/src/red_black_tree.cpp",
+  "file": "/run/media/mohab/Work/Projects/MyDataStructs/Red_Black_Tree/src/red_black_tree.cpp"
+},
+{
+  "directory": "/run/media/mohab/Work/Projects/MyDataStructs/Red_Black_Tree/build_linux",
+  "command": "/usr/bin/clang++   -I/run/media/mohab/Work/Projects/MyDataStructs/Red_Black_Tree/include    -std=c++14 -o CMakeFiles/Red_Black_Tree_testing.dir/tests/red_black_tree_test.cpp.o -c /run/media/mohab/Work/Projects/MyDataStructs/Red_Black_Tree/tests/red_black_tree_test.cpp",
+  "file": "/run/media/mohab/Work/Projects/MyDataStructs/Red_Black_Tree/tests/red_black_tree_test.cpp"
+}
+]
