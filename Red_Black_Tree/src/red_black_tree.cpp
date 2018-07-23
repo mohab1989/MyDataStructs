@@ -22,9 +22,16 @@ SOFTWARE.
 #include "red_black_tree_version.h"
 #include "red_black_tree.h"
 
-
+#include<iostream>
 int main(int argc, char* argv[]){
     RedBlackTree<int> tree;
+    tree.Insert(5);
+    tree.Insert(3);
+    tree.Insert(4);
     tree.Insert(2);
+    tree.Insert(7);
+    tree.Insert(6);
+    tree.Insert(8);
+    tree.Show();
     return 0;
 }
