@@ -8,8 +8,8 @@ class BinarySearchTreeNode: public Node<T> {
         BinarySearchTreeNode(T value);
         void SetValue(T value) override;
         T GetValue() const override;
-        std::unique_ptr<BinarySearchTreeNode> right_child_ = nullptr;
-        std::unique_ptr<BinarySearchTreeNode> left_child_ = nullptr;
+        std::shared_ptr<BinarySearchTreeNode> right_child_ = nullptr;
+        std::shared_ptr<BinarySearchTreeNode> left_child_ = nullptr;
 };
 template <class T>
 BinarySearchTreeNode<T>::BinarySearchTreeNode(){

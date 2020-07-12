@@ -33,7 +33,10 @@ endif()
 set(SOURCE_FILES src/binary_search_tree.cpp)
 
 # Add SOURCE_FILES to executable/library
-add_library(Binary_Search_Tree SHARED ${SOURCE_FILES})
+add_library(Binary_Search_Tree STATIC ${SOURCE_FILES})
+
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MT")
 
 # Add include directories
 target_include_directories(Binary_Search_Tree PUBLIC ${PROJECT_SOURCE_DIR}/include ../Common)

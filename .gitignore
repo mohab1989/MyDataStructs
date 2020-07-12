@@ -45,3 +45,13 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+.vs/*
+*/build/*
+*/build_linux/*
+*/cmake/*
+*compile_commands.json
+*/x64/*
+*/Debug/*
+*/Release/*
+*/x64/*
+Graphs/tests/x64/*
