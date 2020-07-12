@@ -155,22 +155,14 @@ TEST_F (BalancedWithDepth2, InOrderCheck)
 }
 
 TEST_F(BalancedWithDepth2, TestFind) {
-    auto found_node = tree.Find(non_existant);
-    ASSERT_EQ(found_node, nullptr);
-    found_node = tree.Find(root);
-    ASSERT_EQ(root, found_node->GetValue());
-    found_node = tree.Find(left);
-    ASSERT_EQ(left, found_node->GetValue());
-    found_node = tree.Find(right);
-    ASSERT_EQ(right, found_node->GetValue());
-    found_node = tree.Find(left_left);
-    ASSERT_EQ(left_left, found_node->GetValue());
-    found_node = tree.Find(left_right);
-    ASSERT_EQ(left_right, found_node->GetValue());
-    found_node = tree.Find(right_left);
-    ASSERT_EQ(right_left, found_node->GetValue());
-    found_node = tree.Find(right_right);
-    ASSERT_EQ(right_right, found_node->GetValue());
+    ASSERT_FALSE(tree.IsInserted(non_existant));
+    ASSERT_TRUE(tree.IsInserted(root));
+    ASSERT_TRUE(tree.IsInserted(left));
+    ASSERT_TRUE(tree.IsInserted(right));
+    ASSERT_TRUE(tree.IsInserted(left_left));
+    ASSERT_TRUE(tree.IsInserted(left_right));
+    ASSERT_TRUE(tree.IsInserted(right_left));
+    ASSERT_TRUE(tree.IsInserted(right_right));
 }
 
 TEST_F (BalancedWithDepth2, SizeCheck)
@@ -242,14 +234,10 @@ private:
 
 TEST_F(BalanceCheck, HeightChecker) {
     const auto& balancedTree = GetBalancedTree();
-    auto height = balancedTree.Height(balancedTree.Find(2));
-    ASSERT_EQ(height, 2);
-    height = balancedTree.Height(balancedTree.Find(1));
-    ASSERT_EQ(height, 1);
-    height = balancedTree.Height(balancedTree.Find(0));
-    ASSERT_EQ(height, 0);
-    height = balancedTree.Height(balancedTree.Find(3));
-    ASSERT_EQ(height, 0);
+    ASSERT_EQ(balancedTree.Height(2), 2);
+    ASSERT_EQ(balancedTree.Height(1), 1);
+    ASSERT_EQ(balancedTree.Height(0), 0);
+    ASSERT_EQ(balancedTree.Height(3), 0);
 }
 
 TEST_F(BalanceCheck, IsBalancedTrue) {

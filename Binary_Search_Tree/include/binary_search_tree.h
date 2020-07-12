@@ -6,34 +6,37 @@
 template <class T>
 class BinarySearchTree
 {
-	using NodePtr = std::shared_ptr<BinarySearchTreeNode<T>>;
-
 public:
 	BinarySearchTree() = default;
 	void Insert(T value);
 	std::vector<T> ReturnInOrder() const;
 	unsigned int size() const;
 	unsigned int depth() const;
-	NodePtr Find(const T& value) const;
-	int Height(NodePtr node) const;
+	bool IsInserted(const T& value) const;
 	bool IsBalanced() const;
+	int Height(const T& value) const;
 
-private:
+protected:
+	using NodePtr = std::shared_ptr<BinarySearchTreeNode<T>>;
+	NodePtr getRoot();
 	void InsertRecursively(T& value
 		, NodePtr node
 		, unsigned int& current_depth);
-
 	void InOrder(const NodePtr node
 		, std::vector<T>& inorder = nullptr) const;
-
 	NodePtr FindRecursively(const T& value, const NodePtr& node) const;
-
 	bool IsBalancedRecursively(const NodePtr& node) const;
-
+	int HeightRecursively(NodePtr node) const;
 	NodePtr root_ = nullptr;
 	unsigned int size_ = 0;
 	unsigned int depth_ = 0;
 };
+
+template <class T>
+auto BinarySearchTree<T>::getRoot() -> NodePtr
+{
+	return root_;
+}
 
 template <class T>
 unsigned int BinarySearchTree<T>::size() const
@@ -71,9 +74,9 @@ void BinarySearchTree<T>::InOrder(
 }
 
 template <class T>
-auto BinarySearchTree<T>::Find(const T& value) const->NodePtr
+bool BinarySearchTree<T>::IsInserted(const T& value) const
 {
-	return FindRecursively(value, root_);
+	return FindRecursively(value, root_) != nullptr;
 }
 
 template <class T>
@@ -86,6 +89,12 @@ auto BinarySearchTree<T>::FindRecursively(const T& value, const NodePtr& node) c
 	const auto& right_child = FindRecursively(value, node->right_child_);
 	if (right_child) return right_child;
 	return nullptr;
+}
+
+template <class T>
+int BinarySearchTree<T>::Height(const T& value) const
+{
+	return HeightRecursively(FindRecursively(value, root_));
 }
 
 template <class T>
@@ -149,10 +158,10 @@ void BinarySearchTree<T>::InsertRecursively(T& inserted_value
 }
 
 template <class T>
-int BinarySearchTree<T>::Height(NodePtr node) const
+int BinarySearchTree<T>::HeightRecursively(NodePtr node) const
 {
 	if (node == nullptr) return -1;
-	return 1 + std::max(Height(node->left_child_), Height(node->right_child_));
+	return 1 + std::max(HeightRecursively(node->left_child_), HeightRecursively(node->right_child_));
 }
 
 template <class T>
@@ -165,6 +174,6 @@ template <class T>
 bool BinarySearchTree<T>::IsBalancedRecursively(const NodePtr& node) const
 {
 	if (node == nullptr) return true;
-	return std::abs(Height(node->left_child_) - Height(node->right_child_)) <= 1
+	return std::abs(HeightRecursively(node->left_child_) - HeightRecursively(node->right_child_)) <= 1
 		&& IsBalancedRecursively(node->left_child_) && IsBalancedRecursively(node->right_child_);
 }
