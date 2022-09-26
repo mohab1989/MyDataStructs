@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Trie", "Trie\Trie.vcxproj", "{07EFE74A-DC9F-42C1-9022-9EE634138C2C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tie_Test", "Tie_Test\Tie_Test.vcxproj", "{188DC474-CC40-4160-BADD-D26AD2433270}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +23,19 @@ Global
 		{07EFE74A-DC9F-42C1-9022-9EE634138C2C}.Release|x64.Build.0 = Release|x64
 		{07EFE74A-DC9F-42C1-9022-9EE634138C2C}.Release|x86.ActiveCfg = Release|Win32
 		{07EFE74A-DC9F-42C1-9022-9EE634138C2C}.Release|x86.Build.0 = Release|Win32
+		{188DC474-CC40-4160-BADD-D26AD2433270}.Debug|x64.ActiveCfg = Debug|x64
+		{188DC474-CC40-4160-BADD-D26AD2433270}.Debug|x64.Build.0 = Debug|x64
+		{188DC474-CC40-4160-BADD-D26AD2433270}.Debug|x86.ActiveCfg = Debug|Win32
+		{188DC474-CC40-4160-BADD-D26AD2433270}.Debug|x86.Build.0 = Debug|Win32
+		{188DC474-CC40-4160-BADD-D26AD2433270}.Release|x64.ActiveCfg = Release|x64
+		{188DC474-CC40-4160-BADD-D26AD2433270}.Release|x64.Build.0 = Release|x64
+		{188DC474-CC40-4160-BADD-D26AD2433270}.Release|x86.ActiveCfg = Release|Win32
+		{188DC474-CC40-4160-BADD-D26AD2433270}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C28140CD-4FC7-4EAC-91EE-25AAA8EE2A10}
 	EndGlobalSection
 EndGlobal
