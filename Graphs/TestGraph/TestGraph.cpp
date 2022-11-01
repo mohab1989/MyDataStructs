@@ -6,10 +6,6 @@ namespace Graph {
         auto adjacency_list = Graph<int>::AdjacencyList{ {1,{2}} , {1,{}}, {1,{2,3}} };
         EXPECT_EQ(adjacency_list.size(), 1);
         EXPECT_EQ(adjacency_list[1], Graph<int>::Verticies{ 2 });
-        //std::vector<char> verticies = std::vector{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
-        //std::pai
-        //AdjacencyList adjacency_list = AdjacencyList(std::vector{})
-        //Graph graph = Graph();
     }
 
     TEST(CreateAdjacencyList, VerticiesAndAjacentVeticiesAreSet) {
@@ -29,8 +25,9 @@ namespace Graph {
     }
 
     TEST(CreateGraph, AddEdgesCreatesVerticies) {
-        auto graph = Graph<char>({ Graph<char>::Edge{'a', 'b'},
-            Graph<char>::Edge{'b', 'c'} });
+        auto graph = Graph<char>(Graph<char>::Edges{
+            {'a', 'b'},
+            {'b', 'c'} });
         EXPECT_EQ((graph.VerticiesCount()), 3);
 
         auto adjacency_list = graph.GetAdjacencyList();
@@ -53,26 +50,59 @@ namespace Graph {
     }
 
     TEST(CreateGraph, InsertExistigVertixDoesNotOverwriteConnectedVerticies) {
-        auto graph = Graph<char>({ Graph<char>::Edge{'a', 'b'},
-            Graph<char>::Edge{'b', 'c'} });
+        auto graph = Graph<char>(Graph<char>::Edges{
+            {'a', 'b'},
+            {'b', 'c'}});
         auto pair = graph.InsertVertix('b');
         EXPECT_FALSE(pair.second);
     }
 
     TEST(DeleteEdge, DeleteEdgeSuccess) {
-        auto graph = Graph<char>({ Graph<char>::Edge{'a', 'b'},
-            Graph<char>::Edge{'b', 'c'} });
+        auto graph = Graph<char>(Graph<char>::Edges{
+            {'a', 'b'},
+            {'b', 'c'}});
+        EXPECT_TRUE(graph.Contains({ 'a', 'b' }));
         EXPECT_TRUE(graph.DeleteEdge({ 'a' , 'b' }));
-        auto verticies =  graph.GetConnectedVerticies('b');
-        EXPECT_EQ(verticies.size(), 1);
+        EXPECT_FALSE(graph.Contains({ 'a', 'b' }));
     }
 
     TEST(DeleteEdge, DeleteEdgeFail) {
-        auto graph = Graph<char>({ Graph<char>::Edge{'a', 'b'},
-            Graph<char>::Edge{'b', 'c'} });
+        auto graph = Graph<char>(Graph<char>::Edges{
+            {'a', 'b'},
+            {'b', 'c'} });
         EXPECT_FALSE(graph.DeleteEdge({ 'c' , 'b' }));
-        auto verticies = graph.GetConnectedVerticies('b');
-        EXPECT_EQ(verticies.size(), 1);
+        EXPECT_TRUE(graph.Contains({ 'a', 'b' }));
+        EXPECT_TRUE(graph.Contains({ 'b', 'c' }));
+    }
+
+    class GraphTest : public ::testing::Test {
+    protected:
+        void SetUp() override {
+            m_char_graph = Graph<char>({
+            {'a',{'b', 'e'}},
+            {'b',{'a','f'}},
+            {'c',{'d','g','f'}},
+            {'d',{'c','g','h'}},
+            {'e',{'a'}},
+            {'f',{'b','c','g'}},
+            {'g',{'c','d','f','h'}},
+            {'h',{'d','g'}} });
+        }
+
+        Graph<char> m_char_graph;
+    };
+
+    TEST_F(GraphTest, BredthFirstSearchFailReturnPathAllNodes) {
+        auto vertix = m_char_graph.SearchBreadthFirst('z','b');
+        auto expected_search_path = Graph<char>::Path{ 'b','a','f','e'
+            ,'c','g','d','h' };
+        EXPECT_EQ(vertix, expected_search_path);
+    }
+
+    TEST_F(GraphTest, BredthFirstSearchFindsShortestPath) {
+        auto shortest_path = m_char_graph.SearchBreadthFirst('h', 'b');
+        auto expected_search_path = Graph<char>::Path{ 'b','f','g','h' };
+        EXPECT_EQ(shortest_path, expected_search_path);
     }
 
 }
