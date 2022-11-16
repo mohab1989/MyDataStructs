@@ -68,7 +68,7 @@ TEST(DeleteEdge, DeleteEdgeFail) {
 class GraphTest : public ::testing::Test {
  protected:
   void SetUp() override {
-    m_char_graph = Graph<char>({{'a', {'b', 'e'}},
+    m_undirected_graph = Graph<char>({{'a', {'b', 'e'}},
                                 {'b', {'a', 'f'}},
                                 {'c', {'d', 'g', 'f'}},
                                 {'d', {'c', 'g', 'h'}},
@@ -76,22 +76,39 @@ class GraphTest : public ::testing::Test {
                                 {'f', {'b', 'c', 'g'}},
                                 {'g', {'c', 'd', 'f', 'h'}},
                                 {'h', {'d', 'g'}}});
+
+    m_directed_graph = Graph<char>({{'a', {'b', 'c', 'g'}},
+                                    {'b', {'d', 'e'}},
+                                    {'c', {'d'}},
+                                    {'d', {'f','e'}},
+                                    {'e', {}},
+                                    {'f', {'g'}},
+                                    {'g', {'c'}}});
   }
 
-  Graph<char> m_char_graph;
+  Graph<char> m_undirected_graph;
+  Graph<char> m_directed_graph;
 };
 
 TEST_F(GraphTest, BredthFirstSearchFailReturnPathAllNodes) {
-  auto vertix = m_char_graph.SearchBreadthFirst('z', 'b');
+  auto vertix = m_undirected_graph.SearchBreadthFirst('z', 'b');
   auto expected_search_path =
       Graph<char>::Path{'b', 'a', 'f', 'e', 'c', 'g', 'd', 'h'};
   EXPECT_EQ(vertix, expected_search_path);
 }
 
 TEST_F(GraphTest, BredthFirstSearchFindsShortestPath) {
-  auto shortest_path = m_char_graph.SearchBreadthFirst('h', 'b');
+  auto shortest_path = m_undirected_graph.SearchBreadthFirst('h', 'b');
   auto expected_search_path = Graph<char>::Path{'b', 'f', 'g', 'h'};
   EXPECT_EQ(shortest_path, expected_search_path);
+}
+
+TEST_F(GraphTest, DepthFirstSearchCannotFindPath) {
+  EXPECT_FALSE(m_directed_graph.SearchDepthFirst('z', 'a'));
+}
+
+TEST_F(GraphTest, DepthFirstSearchFindsPath) {
+  EXPECT_TRUE(m_directed_graph.SearchDepthFirst('e', 'a'));
 }
 
 }  // namespace Graph

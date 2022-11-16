@@ -43,7 +43,7 @@ class Graph {
   auto InsertVertix(Vertix vertix);
   // DeleteVertix(Vertix vertix);
   Path SearchBreadthFirst(Vertix target_vertix, Vertix root = NULL) const;
-  // SearchDepthFirst(Vertix vertix);
+  bool SearchDepthFirst(Vertix target_vertix, Vertix root) const;
 
   ~Graph() = default;
 
@@ -71,6 +71,9 @@ class Graph {
                           std::queue<Vertix>&& queue,
                           VerticiesWithParent&& visited_verticies,
                           Path&& search_path) const;
+  bool SearchDepthFirst(const Vertix& target_vertix,
+                        std::stack<Vertix>&& visit_stack,
+                        VerticiesWithParent&& visited_verticies) const;
   AdjacencyList m_adjacency_list = AdjacencyList();
   Path GetShortestPath(VerticiesWithParent&& visited_verticies,
                        const Vertix& root, const Vertix& target) const;
@@ -204,5 +207,46 @@ Graph<Vertix>::Path Graph<Vertix>::SearchBreadthFirst(Vertix target_vertix,
   return SearchBreadthFirst(target_vertix, std::move(visit_queue),
                             std::move(VerticiesWithParent()),
                             std::move(Path()));
+}
+
+template <typename Vertix>
+bool Graph<Vertix>::SearchDepthFirst(
+    const Vertix& target_vertix, std::stack<Vertix>&& visit_stack,
+    VerticiesWithParent&& visited_verticies) const {
+  if (visit_stack.empty()) {
+    return false;
+  }
+
+  auto cur_vertix = visit_stack.top();
+  if (cur_vertix == target_vertix) {
+    return true;
+  }
+  visited_verticies.emplace(cur_vertix);
+
+  for (auto connected_vertix : m_adjacency_list.at(cur_vertix)) {
+    if (visited_verticies.contains({connected_vertix})) {
+      continue;
+    }
+    visit_stack.emplace(connected_vertix);
+    if (SearchDepthFirst(target_vertix, std::move(visit_stack),
+                            std::move(visited_verticies))) {
+        return true;
+    }
+  }
+  if (visit_stack.empty()) {
+    return false;
+  }
+  visit_stack.pop();
+  return SearchDepthFirst(target_vertix, std::move(visit_stack),
+                          std::move(visited_verticies));
+}
+
+template <typename Vertix>
+bool Graph<Vertix>::SearchDepthFirst(Vertix target_vertix, Vertix root) const {
+  auto visit_stack = std::stack<Vertix>();
+  visit_stack.emplace(root);
+
+  return SearchDepthFirst(target_vertix, std::move(visit_stack),
+                          std::move(VerticiesWithParent()));
 }
 }  // namespace Graph
