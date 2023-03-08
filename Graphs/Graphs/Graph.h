@@ -4,31 +4,20 @@
 #include <stack>
 #include <unordered_map>
 #include <unordered_set>
+
+#include "IGraph.h"
+
 namespace Graph {
 
 template <typename Vertix>
-class Graph {
+class Graph : public IGraph<Vertix> {
  public:
-  struct Edge {
-    Vertix vertix_1;
-    Vertix vertix_2;
-
-    bool operator==(const Edge& rhs) const {
-      return vertix_1 == rhs.vertix_1 && vertix_2 == rhs.vertix_2;
-    }
-  };
-
-  struct EdgeHasher {
-    std::size_t operator()(const Edge& e) const noexcept {
-      return std::hash<Vertix>{}(e.vertix_1) ^ std::hash<Vertix>{}(e.vertix_2);
-    }
-  };
-
-  using Edges = std::unordered_set<Edge, EdgeHasher>;
-  using Verticies =
-      std::unordered_set<Vertix, std::hash<Vertix>, std::equal_to<Vertix>>;
+  using VerticiesPointers =IGraph<Vertix>::VerticiesPointers;
+  using Verticies = IGraph<Vertix>::Verticies;
+  using AdjacencyList = IGraph<Vertix>::AdjacencyList;
+  using Edge = IGraph<Vertix>::Edge;
+  using Edges = IGraph<Vertix>::Edges;
   using Path = std::list<Vertix>;
-  using AdjacencyList = std::unordered_map<Vertix, Verticies>;
 
   Graph() = default;
   Graph(const AdjacencyList& adjacency_list);
@@ -229,8 +218,8 @@ bool Graph<Vertix>::SearchDepthFirst(
     }
     visit_stack.emplace(connected_vertix);
     if (SearchDepthFirst(target_vertix, std::move(visit_stack),
-                            std::move(visited_verticies))) {
-        return true;
+                         std::move(visited_verticies))) {
+      return true;
     }
   }
   if (visit_stack.empty()) {

@@ -2,6 +2,29 @@
 #include "Graph.h"
 
 namespace Graph {
+class custom {
+ public:
+  int i = 0;
+  int j = 0;
+  custom()=default;
+  custom(const int& i, const int& j) {
+    this->i = i;
+    this->j = j;
+  }
+
+  bool operator==(const custom& rhs) const {
+    return this->i == rhs.i;
+  }
+};
+
+TEST(CreateVerticiesPointers, HasherAndEqualOperatorsWorkAsexpected) {
+  auto pointers_set = IGraph<custom>::VerticiesPointers{
+      std::make_shared<custom>(1,1),
+      std::make_shared<custom>(2,2),
+      std::make_shared<custom>(3, 3),
+      std::make_shared<custom>(1,4)};
+}
+
 TEST(CreateAdjacencyList, RepeatedVerticiesReturnsFirstValuepassed) {
   auto adjacency_list =
       Graph<int>::AdjacencyList{{1, {2}}, {1, {}}, {1, {2, 3}}};
@@ -103,6 +126,12 @@ TEST_F(GraphTest, BredthFirstSearchFindsShortestPath) {
   EXPECT_EQ(shortest_path, expected_search_path);
 }
 
+TEST_F(GraphTest, BredthFirstSearchFindsShortestPathToNodeInMiddle) {
+  auto shortest_path = m_undirected_graph.SearchBreadthFirst('c', 'b');
+  auto expected_search_path = Graph<char>::Path{'b', 'f', 'c'};
+  EXPECT_EQ(shortest_path, expected_search_path);
+}
+
 TEST_F(GraphTest, DepthFirstSearchCannotFindPath) {
   EXPECT_FALSE(m_directed_graph.SearchDepthFirst('z', 'a'));
 }
@@ -112,3 +141,14 @@ TEST_F(GraphTest, DepthFirstSearchFindsPath) {
 }
 
 }  // namespace Graph
+
+// Specialize std::hash
+// https://stackoverflow.com/questions/8157937/how-to-specialize-stdhashkeyoperator-for-user-defined-type-in-unordered
+namespace std {
+template<>
+struct hash<Graph::custom> {
+  std::size_t operator()(const Graph::custom& e) const noexcept {
+    return std::hash<int>{}(e.i);// we chose to use i member only for hashing to test overwrite
+  }
+};
+}  // namespace std
