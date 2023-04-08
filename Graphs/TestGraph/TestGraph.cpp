@@ -4,25 +4,41 @@
 namespace Graph {
 class custom {
  public:
-  int i = 0;
-  int j = 0;
-  custom()=default;
-  custom(const int& i, const int& j) {
-    this->i = i;
-    this->j = j;
+  int id = 0;
+  int data = 0;
+  custom() = default;
+  custom(const int& id, const int& data) {
+    this->id = id;
+    this->data = data;
   }
 
-  bool operator==(const custom& rhs) const {
-    return this->i == rhs.i;
+  bool operator==(const custom& rhs) const { return this->id == rhs.id; }
+};
+}  // namespace Graph
+
+// Specialize std::hash
+// https://stackoverflow.com/questions/8157937/how-to-specialize-stdhashkeyoperator-for-user-defined-type-in-unordered
+namespace std {
+template <>
+struct hash<Graph::custom> {
+  std::size_t operator()(const Graph::custom& e) const noexcept {
+    return std::hash<int>{}(
+        e.id);  // we chose to use i member only for hashing to test overwrite
   }
 };
+}  // namespace std
 
+
+namespace Graph {
 TEST(CreateVerticiesPointers, HasherAndEqualOperatorsWorkAsexpected) {
   auto pointers_set = IGraph<custom>::VerticiesPointers{
       std::make_shared<custom>(1,1),
       std::make_shared<custom>(2,2),
-      std::make_shared<custom>(3, 3),
-      std::make_shared<custom>(1,4)};
+      std::make_shared<custom>(3, 3)};
+
+  // Do not allow non unique value in set.
+  EXPECT_THROW(pointers_set.insert(std::make_shared<custom>(1, 4)),
+               std::runtime_error);
 }
 
 TEST(CreateAdjacencyList, RepeatedVerticiesReturnsFirstValuepassed) {
@@ -62,15 +78,15 @@ TEST(CreateGraph, AddEdgesCreatesVerticies) {
   EXPECT_EQ(connected_verticies, Graph<char>::Verticies{'d'});
 }
 
-TEST(CreateGraph, InsertNewVertixSucceeds) {
+TEST(CreateGraph, InsertNewVertexSucceeds) {
   auto graph = Graph<char>({Graph<char>::Edge{'a', 'b'}});
-  auto pair = graph.InsertVertix('c');
+  auto pair = graph.InsertVertex('c');
   EXPECT_TRUE(pair.second);
 }
 
-TEST(CreateGraph, InsertExistigVertixDoesNotOverwriteConnectedVerticies) {
+TEST(CreateGraph, InsertExistigVertexDoesNotOverwriteConnectedVerticies) {
   auto graph = Graph<char>(Graph<char>::Edges{{'a', 'b'}, {'b', 'c'}});
-  auto pair = graph.InsertVertix('b');
+  auto pair = graph.InsertVertex('b');
   EXPECT_FALSE(pair.second);
 }
 
@@ -141,14 +157,3 @@ TEST_F(GraphTest, DepthFirstSearchFindsPath) {
 }
 
 }  // namespace Graph
-
-// Specialize std::hash
-// https://stackoverflow.com/questions/8157937/how-to-specialize-stdhashkeyoperator-for-user-defined-type-in-unordered
-namespace std {
-template<>
-struct hash<Graph::custom> {
-  std::size_t operator()(const Graph::custom& e) const noexcept {
-    return std::hash<int>{}(e.i);// we chose to use i member only for hashing to test overwrite
-  }
-};
-}  // namespace std
